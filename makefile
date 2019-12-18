@@ -1,18 +1,28 @@
-all: isort txtfind
-isort:isort.o mainsort.o  
-	gcc -Wall -o all isort.o main.o 
-mainsort.o: main.c isort.h
-	gcc -Wall -c main.c
-isort.o: isort.c isort.h
-	gcc -Wall -c isort.c
+CC = gcc 
+FLAGS = -Wall -g
 
-txtfind: txtfind.o mainFind.o
-	gcc -Wall -o all txtfind.o mainFind.o
-mainFind.o:mainFind.c txtfind.h
-	gcc -Wall -c mainFind.c	
+all: isort txtfind
+
+isort: main.o isort.o
+	$(CC) $(FLAGS) -o isort main.o isort.o 
+
+main.o: main.c isort.h
+	$(CC) $(FLAGS) -c main.c 
+
+isort.o: isort.c isort.h
+	$(CC) $(FLAGS) -c isort.c 
+
+
+txtfind: mainFind.o txtfind.o
+	$(CC) $(FLAGS) -o txtfind mainFind.o txtfind.o 
+
+mainFind.o: txtfind.c txtfind.h
+	$(CC) $(FLAGS) -c mainFind.c 
+
 txtfind.o: txtfind.c txtfind.h
-	gcc -Wall -c txtfind.c
+	$(CC) $(FLAGS) -c txtfind.c
+
 .PHONY: clean all
+
 clean:
-	rm -f *.o all
-	
+	rm -f *.o isort txtfind
